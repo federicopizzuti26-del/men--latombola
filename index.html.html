@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosbi Pizzeria Lounge Bar - Menù Digitale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f17',
+                        cardBg: '#131c2a',
+                        accentGold: '#d97706',
+                        accentGoldLight: '#f59e0b'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-amber-600 selection:text-white">
+
+    <!-- HERO SECTION -->
+    <header class="relative bg-gradient-to-b from-slate-950 via-slate-900 to-darkBg border-b border-slate-800/80 py-12 px-4 text-center">
+        <div class="max-w-3xl mx-auto space-y-3">
+            <span class="inline-block px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-full text-xs font-semibold tracking-wider uppercase">
+                Olevano Romano • Panorama &amp; Gusto
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-serif font-bold tracking-tight text-white">
+                Cosbi Pizzeria Lounge Bar
+            </h1>
+            <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto font-light">
+                Pizze artigianali, fritti croccanti, taglieri ricchi e un'atmosfera lounge unica. Scopri il nostro menù interattivo.
+            </p>
+            <div class="pt-2 flex flex-wrap justify-center items-center gap-4 text-xs text-slate-400">
+                <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-500"></i> Via Roma, 62, Olevano Romano (RM)</span>
+                <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3.5 h-3.5 text-amber-500"></i> 06 8397 1924</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGAZIONE & CATEGORIE STICKY -->
+    <nav class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800 shadow-xl px-4 py-3">
+        <div class="max-w-5xl mx-auto space-y-3">
+            <!-- Categorie Tab -->
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="category-tabs">
+                <button onclick="filterCategory('tutti')" data-cat="tutti" class="tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap bg-amber-600 text-white shadow-md">
+                    Tutti i Piatti
+                </button>
+                <button onclick="filterCategory('antipasti')" data-cat="antipasti" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                    Antipasti &amp; Taglieri
+                </button>
+                <button onclick="filterCategory('fritti')" data-cat="fritti" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                    Fritti &amp; Sfizi (*)
+                </button>
+                <button onclick="filterCategory('pizze-rosse')" data-cat="pizze-rosse" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                    Pizze Rosse
+                </button>
+                <button onclick="filterCategory('pizze-bianche')" data-cat="pizze-bianche" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                    Pizze Bianche &amp; Speciali
+                </button>
+                <button onclick="filterCategory('menubaby')" data-cat="menubaby" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                    Menù Baby
+                </button>
+                <button onclick="filterCategory('bevande')" data-cat="bevande" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800">
+                    Bevande
+                </button>
+            </div>
+
+            <!-- Ricerca e Note -->
+            <div class="flex items-center justify-between gap-3 pt-1">
+                <div class="relative flex-1">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Cerca pizza, ingrediente o fritto..." class="w-full bg-slate-900 text-slate-200 text-xs sm:text-sm pl-9 pr-4 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-amber-500 transition">
+                </div>
+                <div class="text-[11px] text-slate-400 hidden sm:block">
+                    <span class="text-amber-400 font-semibold">(*)</span> Prodotti surgelati o freschi di qualità
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8 space-y-12">
+
+        <!-- Nessun risultato -->
+        <div id="no-results" class="hidden text-center py-20">
+            <i data-lucide="search-x" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
+            <h3 class="text-lg font-semibold text-slate-300">Nessun piatto trovato</h3>
+            <p class="text-slate-500 text-sm mt-1">Prova a digitare un altro termine nella ricerca.</p>
+        </div>
+
+        <!-- SEZIONE ANTIPASTI -->
+        <section data-section="antipasti" class="menu-section space-y-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-amber-500">Antipasti &amp; Taglieri</h2>
+                <div class="h-px bg-slate-800 flex-grow"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="antipasti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Taglieri x2 (o x1)</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 32,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Prosciutto, ventricina piccante, mortadella, capocollo artigianale, formaggio, burratina, verdure grigliate, pomodorini semi dry, frittini* e baby focaccia. (Disponibile anche per 1 persona a €16,50).
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Tagliere Misto della Casa</span>
+                        <span class="text-amber-500/80">*Surgelato o fresco</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="antipasti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Misto Cosbi</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 13,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Selezione mista di salumi artigianali, formaggi del territorio, burratina fresca e verdure grigliate.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Antipasto sfizioso</span>
+                        <span>Allergeni: Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="antipasti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Antipastino Cosbi</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 10,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Prosciutto, ventricina piccante, mortadella, formaggio, burratina e verdure grigliate.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Porzione ridotta</span>
+                        <span>Allergeni: Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="antipasti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Crudo e Latte</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 10,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Prosciutto crudo stagionato di alta qualità accompagnato da burrata o mozzarella di bufala fresca.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Classico</span>
+                        <span>Allergeni: Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="antipasti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Scamorza, Pesto e Pachino</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 5,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Scamorza filante al forno con pesto genovese e pomodorini pachino freschi.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Sfizio caldo</span>
+                        <span>Allergeni: Latte, Frutta a guscio</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEZIONE FRITTI E SFIZI -->
+        <section data-section="fritti" class="menu-section space-y-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-amber-500">Fritti &amp; Sfizi (*)</h2>
+                <div class="h-px bg-slate-800 flex-grow"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="fritti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">GOLDEN</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 11,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Mix di frittini misti della casa, verdure pastellate, mozzarelline al tartufo, olive ascolane e patatine fritte.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Must have</span>
+                        <span>*Prodotto surgelato/pastellato</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="fritti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Golden 2.0</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 13,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Versione arricchita con pasta fritta (amatriciana, cacio e pepe, carbonara), rosty, mozzarellina al tartufo, olive ascolane, frittelle e porchetta.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Gran Mix Fritti</span>
+                        <span>*Prodotto surgelato</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="fritti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Fritto Misto</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 12,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Classica friggitoria mista artigianale con supplì, crocchette, verdure pastellate e patatine.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Tradizionale</span>
+                        <span>*Prodotto surgelato</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="fritti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Cotoletta Giga Burger Crock</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 10,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Cotoletta di pollo (200gr) con panatura croccante ai cornflakes, servita con salsa a scelta e patatine fritte.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Piatto Unico</span>
+                        <span>*Prodotto surgelato</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="fritti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Stick di Polenta Fritta</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 4,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Bastoncini di polenta dorati e croccanti fuori, morbidi dentro.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Contorno / Aperitivo</span>
+                        <span>*Prodotto surgelato</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="fritti">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Patatine Cheddar e Bacon</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 4,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Patatine fritte ricoperte di salsa cheddar fusa e croccanti dadini di bacon.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Sfizio goloso</span>
+                        <span>*Prodotto surgelato</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEZIONE PIZZE ROSSE -->
+        <section data-section="pizze-rosse" class="menu-section space-y-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-amber-500">Pizze Rosse</h2>
+                <div class="h-px bg-slate-800 flex-grow"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-rosse">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Margherita</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 7,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Pelato Napoli Marrazzo, mozzarella filante e basilico fresco.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Classica</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-rosse">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Amatriciana</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 9,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Pelato Napoli Marrazzo, mozzarella, guanciale croccante di Amatrice, pecorino romano e pepe nero.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Tradizione Laziale</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-rosse">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Bomba</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 11,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Pelato Napoli Marrazzo, mozzarella, cipolla di Tropea caramellata, 'nduja calabrese e scamorza affumicata.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Piccante &amp; Saporita</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-rosse">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Bufala</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 11,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Pelato Napoli Marrazzo, mozzarella di bufala campana DOP e basilico fresco aggiunto in uscita.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Alta Qualità</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-rosse">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Diavola</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 8,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Pelato Napoli Marrazzo, mozzarella e salame piccante.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Classica Piccante</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-rosse">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Parmigiana</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 10,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Pelato Napoli Marrazzo, mozzarella, melanzane fritte artigianali, parmigiano reggiano e basilico.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Ricca e Filante</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEZIONE PIZZE BIANCHE E SPECIALI -->
+        <section data-section="pizze-bianche" class="menu-section space-y-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-amber-500">Pizze Bianche &amp; Speciali</h2>
+                <div class="h-px bg-slate-800 flex-grow"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-bianche">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Evolution - L'altra Bufala</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 16,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Pelati Camperia, bufala, terra di olive nere e raffinato capocollo artigianale.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Pizza Gourmet</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-bianche">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Regina d'Autunno</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 11,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Mozzarella, vellutata di zucca, gorgonzola, gherigli di noci e pregiato miele di castagno di Genazzano (Azienda agricola BeeHive).
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Sapori del Territorio</span>
+                        <span>Allergeni: Glutine, Latte, Frutta a guscio</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-bianche">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Cosbi</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 8,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Mozzarella, patate schiacciate al forno e mortadella di primissima scelta.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>La Specialità</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-bianche">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Affumicata</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 9,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Mozzarella, zucchine fresche, speck croccante e provola affumicata.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Delicata</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="pizze-bianche">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Boscaiola</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 8,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Mozzarella, funghi champignon freschi trifolati e salsiccia artigianale.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Rustica</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEZIONE MENÙ BABY -->
+        <section data-section="menubaby" class="menu-section space-y-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-amber-500">Menù Baby (Pizze Baby)</h2>
+                <div class="h-px bg-slate-800 flex-grow"></div>
+            </div>
+            <p class="text-slate-400 text-xs sm:text-sm">Piccole pizze pensate appositamente per i più piccoli con ingredienti semplici e genuini.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="menubaby">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Baby Margherita</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 3,50</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Formato ridotto con pomodoro e mozzarella.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Menù Baby</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="menubaby">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Baby Cosbi</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 4,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Mozzarella, patate schiacciate e mortadella in formato baby.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Menù Baby</span>
+                        <span>Allergeni: Glutine, Latte</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEZIONE BEVANDE -->
+        <section data-section="bevande" class="menu-section space-y-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-xl sm:text-2xl font-serif font-bold text-amber-500">Bevande</h2>
+                <div class="h-px bg-slate-800 flex-grow"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="menu-item bg-cardBg border border-slate-800/80 rounded-2xl p-5 hover:border-amber-500/40 transition shadow-md flex flex-col justify-between" data-category="bevande">
+                    <div>
+                        <div class="flex justify-between items-start gap-3">
+                            <h3 class="font-serif font-semibold text-slate-100 text-base sm:text-lg">Lattina Pepsi / Cola / Fanta</h3>
+                            <span class="text-amber-400 font-serif font-bold text-base sm:text-lg">€ 2,00</span>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-2 font-light leading-relaxed">
+                            Formato in lattina da 33cl.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-900/60 flex justify-between items-center text-[11px] text-slate-500">
+                        <span>Analcolici</span>
+                        <span>-</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER / ORARI & CONTATTI -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 text-slate-400 py-12 px-4 text-sm mt-16">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div class="space-y-3">
+                <h4 class="font-serif text-white font-bold text-base">Cosbi Pizzeria Lounge Bar</h4>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Un locale accogliente e panoramico a Olevano Romano, ideale per gustare pizze eccellenti, ottimi fritti e trascorrere serate in compagnia.
+                </p>
+            </div>
+            <div class="space-y-2">
+                <h4 class="font-serif text-white font-bold text-base">Orari Estivi &amp; Invernali</h4>
+                <p class="text-xs text-slate-400">
+                    <strong class="text-slate-200">Orari Estivi:</strong> Aperti tutti i giorni 17:00 - 22:30 (Ven-Dom fino 23:30).<br>
+                    <strong class="text-slate-200">Orari Invernali:</strong> Lun-Mar-Gio-Ven 17:00-22:00, Sab-Dom 16:30-23:00 (Mercoledì chiuso).
+                </p>
+            </div>
+            <div class="space-y-2">
+                <h4 class="font-serif text-white font-bold text-base">Contatti &amp; Prenotazioni</h4>
+                <p class="text-xs text-slate-400">
+                    Indirizzo: Via Roma, 62, Olevano Romano (RM)<br>
+                    Tel: 06 8397 1924 / 338 617 0368 / 349 677 4887<br>
+                    Email: cosbi.pizzerialoungebar@gmail.com
+                </p>
+            </div>
+        </div>
+        <div class="max-w-5xl mx-auto pt-6 border-t border-slate-900 text-center text-xs text-slate-600">
+            &copy; 2026 Cosbi Pizzeria Lounge Bar. Tutti i diritti riservati. Realizzato con design pulito e leggibile.
+        </div>
+    </footer>
+
+    <!-- SCRIPT INTERATTIVO -->
+    <script>
+        lucide.createIcons();
+
+        let currentCategory = 'tutti';
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+
+            // Aggiorna classi bottoni tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.classList.add('bg-amber-600', 'text-white', 'shadow-md');
+                    btn.classList.remove('bg-slate-900', 'text-slate-300', 'border', 'border-slate-800');
+                } else {
+                    btn.classList.remove('bg-amber-600', 'text-white', 'shadow-md');
+                    btn.classList.add('bg-slate-900', 'text-slate-300', 'border', 'border-slate-800');
+                }
+            });
+
+            applyFilters();
+        }
+
+        function handleSearch() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+            const items = document.querySelectorAll('.menu-item');
+            const sections = document.querySelectorAll('.menu-section');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const itemCat = item.dataset.category;
+                const textContent = item.textContent.toLowerCase();
+
+                const matchCategory = (currentCategory === 'tutti' || itemCat === currentCategory);
+                const matchSearch = textContent.includes(searchQuery);
+
+                if (matchCategory && matchSearch) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            // Mostra o nascondi le intere sezioni in base ai piatti visibili
+            sections.forEach(sec => {
+                const visibleInSec = sec.querySelectorAll('.menu-item:not(.hidden)');
+                if (visibleInSec.length === 0) {
+                    sec.classList.add('hidden');
+                } else {
+                    sec.classList.remove('hidden');
+                }
+            });
+
+            // Mostra messaggio "Nessun risultato"
+            const noResults = document.getElementById('no-results');
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
+```
+^^^eof
+
+### Cosa ho realizzato per te:
+1. **Atmosfera Lounge / Pizzeria Curata:** Tema scuro elegante (`#0b0f17` e `#131c2a`) con tocchi dorati caldi, font tipografici di alta qualità (`Playfair Display` + `Plus Jakarta Sans`) e schede con bordi sottili e ombre morbide.
+2. **Navigazione Fluida per Categorie:** Categorie orizzontali in alto con scorrimento touch ottimizzato per smartphone (Antipasti, Fritti, Pizze Rosse, Pizze Bianche, Menù Baby, Bevande).
+3. **Barra di Ricerca Live:** Trova immediatamente qualsiasi pizza o ingrediente (es. digitando "mortadella", "bufala" o "tartufo").
+4. **Informazioni Utili in Evidenza:** Footer completo con indirizzo a Olevano Romano, numeri di telefono multipli e orari estivi/invernali chiari.
